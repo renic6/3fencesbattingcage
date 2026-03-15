@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>3 Fences Batting Cage Leaderboard</title>
+  <style>
+    :root {
+      --bg: #0d1b2a;
+      --panel: #14263d;
+      --panel-2: #1b3350;
+      --accent: #f4b400;
+      --accent-2: #ffffff;
+      --text: #f5f7fa;
+      --muted: #b9c4d0;
+      --line: rgba(255,255,255,0.12);
+      --shadow: 0 14px 40px rgba(0,0,0,0.28);
+      --radius: 18px;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: Arial, Helvetica, sans-serif;
+      background: linear-gradient(180deg, #08121d 0%, #0d1b2a 50%, #13283f 100%);
+      color: var(--text);
+    }
+
+    .wrap {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 32px 20px 60px;
+    }
+
+    .hero {
+      background: linear-gradient(135deg, rgba(244,180,0,0.18), rgba(20,38,61,0.95));
+      border: 1px solid var(--line);
+      border-radius: 28px;
+      padding: 30px 24px;
+      box-shadow: var(--shadow);
+      margin-bottom: 24px;
+    }
+
+    .brand {
+      display: inline-block;
+      padding: 8px 14px;
+      border-radius: 999px;
+      background: rgba(255,255,255,0.08);
+      color: var(--accent);
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      font-size: 13px;
+      margin-bottom: 14px;
+    }
+
+    h1 {
+      margin: 0 0 10px;
+      font-size: clamp(2rem, 4vw, 3.4rem);
+      line-height: 1.05;
+    }
+
+    .subtext {
+      margin: 0;
+      color: var(--muted);
+      font-size: 1rem;
+      max-width: 760px;
+      line-height: 1.6;
+    }
+
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 16px;
+      margin: 24px 0;
+    }
+
+    .stat-card {
+      background: rgba(255,255,255,0.05);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      padding: 18px;
+    }
+
+    .stat-label {
+      color: var(--muted);
+      font-size: 0.92rem;
+      margin-bottom: 8px;
+    }
+
+    .stat-value {
+      font-size: 2rem;
+      font-weight: 700;
+      color: var(--accent);
+    }
+
+    .board {
+      background: rgba(20,38,61,0.95);
+      border: 1px solid var(--line);
+      border-radius: 24px;
+      overflow: hidden;
+      box-shadow: var(--shadow);
+    }
+
+    .board-top {
+      padding: 20px 22px;
+      border-bottom: 1px solid var(--line);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .board-top h2 {
+      margin: 0;
+      font-size: 1.4rem;
+    }
+
+    .board-note {
+      color: var(--muted);
+      font-size: 0.95rem;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    thead {
+      background: rgba(255,255,255,0.04);
+    }
+
+    th, td {
+      padding: 16px 18px;
+      text-align: left;
+      border-bottom: 1px solid var(--line);
+    }
+
+    th {
+      color: var(--muted);
+      font-size: 0.9rem;
+      letter-spacing: 0.03em;
+      text-transform: uppercase;
+    }
+
+    tbody tr:hover {
+      background: rgba(255,255,255,0.035);
+    }
+
+    .rank {
+      font-weight: 700;
+      color: var(--accent);
+      width: 80px;
+    }
+
+    .distance {
+      font-weight: 700;
+      font-size: 1.05rem;
+    }
+
+    .footer {
+      margin-top: 18px;
+      color: var(--muted);
+      font-size: 0.92rem;
+      text-align: center;
+    }
+
+    @media (max-width: 760px) {
+      .stats {
+        grid-template-columns: 1fr;
+      }
+
+      th, td {
+        padding: 14px 12px;
+        font-size: 0.95rem;
+      }
+
+      .hero {
+        padding: 24px 18px;
+      }
+
+      .board-top {
+        padding: 18px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <section class="hero">
+      <div class="brand">3 Fences Batting Cage</div>
+      <h1>Home Run Leaderboard</h1>
+      <p class="subtext">
+        Track the biggest hits at 3 Fences Batting Cage. This page is built to be easy to update — just edit the leaderboard entries in the code and re-save the file.
+      </p>
+
+      <div class="stats">
+        <div class="stat-card">
+          <div class="stat-label">Longest Hit</div>
+          <div class="stat-value" id="longestHit">-- ft</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Total Entries</div>
+          <div class="stat-value" id="totalEntries">--</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Most Recent Date</div>
+          <div class="stat-value" id="recentDate" style="font-size:1.2rem; color: var(--text);">--</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="board">
+      <div class="board-top">
+        <h2>Top Distance Hits</h2>
+        <div class="board-note">Update entries in the <strong>leaderboardData</strong> section of this file.</div>
+      </div>
+
+      <table>
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Batter Name</th>
+            <th>Distance</th>
+            <th>Date</th>
+          </tr>
+        </thead>
+        <tbody id="leaderboardBody"></tbody>
+      </table>
+    </section>
+
+    <div class="footer">
+      3 Fences Batting Cage • Open Field Power Tracking
+    </div>
+  </div>
+
+  <script>
+    /*
+      =====================================================
+      EASY UPDATE SECTION
+      -----------------------------------------------------
+      To add a new leaderboard entry, copy one line below
+      and change the name, distance, and date.
+
+      Date format recommendation: YYYY-MM-DD
+      Example: 2026-03-14
+      =====================================================
+    */
+    const leaderboardData = [
+      { name: "Mason R.", distance: 402, date: "2026-03-14" },
+      { name: "Tyler H.", distance: 397, date: "2026-03-14" },
+      { name: "Jace P.", distance: 389, date: "2026-03-13" },
+      { name: "Ethan W.", distance: 381, date: "2026-03-12" },
+      { name: "Logan C.", distance: 374, date: "2026-03-10" },
+      { name: "Noah B.", distance: 369, date: "2026-03-09" }
+    ];
+
+    const sortedData = [...leaderboardData].sort((a, b) => b.distance - a.distance);
+    const leaderboardBody = document.getElementById('leaderboardBody');
+
+    sortedData.forEach((entry, index) => {
+      const row = document.createElement('tr');
+      row.innerHTML = `
+        <td class="rank">#${index + 1}</td>
+        <td>${entry.name}</td>
+        <td class="distance">${entry.distance} ft</td>
+        <td>${formatDate(entry.date)}</td>
+      `;
+      leaderboardBody.appendChild(row);
+    });
+
+    document.getElementById('longestHit').textContent = sortedData.length
+      ? `${sortedData[0].distance} ft`
+      : '-- ft';
+
+    document.getElementById('totalEntries').textContent = sortedData.length || '--';
+
+    const recentEntry = [...leaderboardData].sort((a, b) => new Date(b.date) - new Date(a.date))[0];
+    document.getElementById('recentDate').textContent = recentEntry
+      ? formatDate(recentEntry.date)
+      : '--';
+
+    function formatDate(dateString) {
+      const date = new Date(dateString + 'T12:00:00');
+      return date.toLocaleDateString('en-US', {
+        year: 'numeric',
+        month: 'short',
+        day: 'numeric'
+      });
+    }
+  </script>
+</body>
+</html>
